@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import { Redirect} from "react-router-dom"
 import { signin } from './apiCalls';
 const Login = () => {
+
     const [values,setValues] = useState({
         email:"",
         password:"",
@@ -17,13 +18,15 @@ const Login = () => {
 
     const performRedirect = ()=>{
         if(isloggedin){
-          return <Redirect  to="/home" />
+          return <Redirect  to={
+              {
+                  pathname:"/home",
+                  state :{email:email}
+              }
+          }  />
          }
     }
     
-    
-   
-
 
     const failure = ()=>{
         if(!isloggedin  && message){
@@ -46,7 +49,6 @@ const Login = () => {
         signin({email,password})
         .then(
             data =>{
-                console.log(data);
                 if(data?.errors){
                     setValues({...values,error:data.errors[0].message,isloggedin:false,message:true,loading:false})
                     console.log(values);
